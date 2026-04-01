@@ -1,38 +1,40 @@
-import java.util.*;
-
-/* Bogie Class */
-class Bogie {
-    private String name;
-    private int capacity;
-
-    public Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    public String getName() { return name; }
-    public int getCapacity() { return capacity; }
-}
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("=== UC10: Total Seating Capacity Using reduce() ===");
+        System.out.println("=== UC11: Validate Train ID & Cargo Code (Regex) ===");
 
-        // Step 1: Create list of bogies
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 24));
+        // Sample inputs
+        String trainId = "TRN-1234";
+        String cargoCode = "PET-AB";
 
-        // Step 2: Stream → map → reduce
-        int totalCapacity = bogies
-                .stream()
-                .map(Bogie::getCapacity)   // extract capacity
-                .reduce(0, Integer::sum);  // sum all values
+        // Regex patterns
+        String trainPatternStr = "TRN-\\d{4}";
+        String cargoPatternStr = "PET-[A-Z]{2}";
 
-        // Step 3: Display result
-        System.out.println("Total Seating Capacity of Train: " + totalCapacity);
+        // Compile patterns
+        Pattern trainPattern = Pattern.compile(trainPatternStr);
+        Pattern cargoPattern = Pattern.compile(cargoPatternStr);
+
+        // Create matchers
+        Matcher trainMatcher = trainPattern.matcher(trainId);
+        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
+
+        // Validate Train ID
+        if (trainMatcher.matches()) {
+            System.out.println("Train ID is VALID: " + trainId);
+        } else {
+            System.out.println("Train ID is INVALID: " + trainId);
+        }
+
+        // Validate Cargo Code
+        if (cargoMatcher.matches()) {
+            System.out.println("Cargo Code is VALID: " + cargoCode);
+        } else {
+            System.out.println("Cargo Code is INVALID: " + cargoCode);
+        }
     }
 }
