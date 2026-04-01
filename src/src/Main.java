@@ -44,5 +44,33 @@ public class Main {
 
         System.out.println("\nBogie IDs (duplicates automatically removed):");
         System.out.println(bogieIds);
+
+        // ===== UC4 =====
+        System.out.println("\n=== UC4: Train Consist Using LinkedList ===");
+
+        LinkedList<String> consist = new LinkedList<>();
+
+        consist.add("Engine");
+        consist.add("Sleeper");
+        consist.add("AC");
+        consist.add("Cargo");
+        consist.add("Guard");
+
+        System.out.println("\nInitial Train Consist:");
+        System.out.println(consist);
+
+        consist.add(2, "Pantry Car");
+
+        System.out.println("\nAfter inserting Pantry Car at position 2:");
+        System.out.println(consist);
+
+        consist.removeFirst();
+        consist.removeLast();
+
+        System.out.println("\nAfter removing first and last bogie:");
+        System.out.println(consist);
+
+        System.out.println("\nFinal Ordered Train Consist:");
+        System.out.println(consist);
     }
 }
