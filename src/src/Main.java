@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -33,5 +32,17 @@ public class Main {
 
         System.out.println("\nFinal Passenger Bogie List:");
         System.out.println(passengerBogies);
+
+        // ===== UC3 =====
+        Set<String> bogieIds = new HashSet<>();
+
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
+        bogieIds.add("BG103");
+        bogieIds.add("BG101"); // duplicate
+        bogieIds.add("BG102"); // duplicate
+
+        System.out.println("\nBogie IDs (duplicates automatically removed):");
+        System.out.println(bogieIds);
     }
 }
