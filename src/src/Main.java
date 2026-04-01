@@ -1,5 +1,24 @@
 import java.util.*;
 
+/* Bogie Class */
+class Bogie {
+    private String name;
+    private int capacity;
+
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) {
@@ -16,6 +35,7 @@ public class Main {
         passengerBogies.add("Sleeper");
         passengerBogies.add("AC Chair");
         passengerBogies.add("First Class");
+
         passengerBogies.remove("AC Chair");
 
         System.out.println("\nFinal Passenger Bogie List:");
@@ -54,12 +74,10 @@ public class Main {
         formation.add("Guard");
         formation.add("Sleeper");
 
-        System.out.println("\nFinal Train Formation (Insertion Order Preserved, No Duplicates):");
+        System.out.println("\nFinal Train Formation:");
         System.out.println(formation);
 
         // ===== UC6 =====
-        System.out.println("\n=== UC6: Bogie Capacity Mapping Using HashMap ===");
-
         HashMap<String, Integer> bogieCapacity = new HashMap<>();
         bogieCapacity.put("Sleeper", 72);
         bogieCapacity.put("AC Chair", 60);
@@ -68,6 +86,21 @@ public class Main {
         System.out.println("\nBogie Capacity Details:");
         for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
             System.out.println(entry.getKey() + " -> Capacity: " + entry.getValue());
+        }
+
+        // ===== UC7 =====
+        System.out.println("\n=== UC7: Sort Bogies by Capacity ===");
+
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 60));
+        bogies.add(new Bogie("First Class", 24));
+
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+
+        System.out.println("\nBogies sorted by capacity (Ascending):");
+        for (Bogie b : bogies) {
+            System.out.println(b.getName() + " -> Capacity: " + b.getCapacity());
         }
     }
 }
