@@ -106,6 +106,16 @@ public class Main {
         }
     }
 
+    // ===== UC18 Linear Search =====
+    public static boolean linearSearch(String[] arr, String key) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(key)) {
+                return true; // early stop
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -309,6 +319,30 @@ public class Main {
 
         System.out.println("Sorted Bogie Names:");
         System.out.println(Arrays.toString(names));
+
+        // ===== UC18 =====
+        System.out.println("\n=== UC18: Linear Search for Bogie ID ===");
+
+        System.out.println("Enter number of bogie IDs:");
+        int k = sc.nextInt();
+        sc.nextLine();
+
+        String[] ids = new String[k];
+
+        System.out.println("Enter bogie IDs:");
+        for (int i = 0; i < k; i++) {
+            ids[i] = sc.nextLine();
+        }
+
+        System.out.println("Enter ID to search:");
+        String key = sc.nextLine();
+
+        boolean found = linearSearch(ids, key);
+
+        if (found)
+            System.out.println("Bogie ID FOUND");
+        else
+            System.out.println("Bogie ID NOT FOUND");
 
         sc.close();
     }
