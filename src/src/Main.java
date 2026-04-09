@@ -108,12 +108,37 @@ public class Main {
 
     // ===== UC18 Linear Search =====
     public static boolean linearSearch(String[] arr, String key) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i].equals(key)) {
-                return true; // early stop
-            }
+        for (String s : arr) {
+            if (s.equals(key)) return true;
         }
         return false;
+    }
+
+    // ===== UC19 Binary Search =====
+    public static boolean binarySearch(String[] arr, String key) {
+
+        if (arr.length == 0) return false; // empty case
+
+        Arrays.sort(arr); // ensure sorted
+
+        int low = 0;
+        int high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            int cmp = key.compareTo(arr[mid]);
+
+            if (cmp == 0) {
+                return true; // found
+            } else if (cmp < 0) {
+                high = mid - 1; // left side
+            } else {
+                low = mid + 1; // right side
+            }
+        }
+
+        return false; // not found
     }
 
     public static void main(String[] args) {
@@ -231,28 +256,6 @@ public class Main {
 
         System.out.println(isSafe ? "SAFE" : "UNSAFE");
 
-        // ===== UC13 =====
-        List<Bogie> big = new ArrayList<>();
-        for (int i = 0; i < 100000; i++) {
-            big.add(new Bogie("B" + i, i % 100));
-        }
-
-        long start1 = System.nanoTime();
-        List<Bogie> loop = new ArrayList<>();
-        for (Bogie b : big) {
-            if (b.getCapacity() > 60) loop.add(b);
-        }
-        long end1 = System.nanoTime();
-
-        long start2 = System.nanoTime();
-        List<Bogie> stream = big.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .toList();
-        long end2 = System.nanoTime();
-
-        System.out.println("Loop time: " + (end1 - start1));
-        System.out.println("Stream time: " + (end2 - start2));
-
         // ===== UC14 =====
         try {
             System.out.println("\nEnter Passenger Bogie Type:");
@@ -269,8 +272,6 @@ public class Main {
         }
 
         // ===== UC15 =====
-        System.out.println("\n=== UC15: Safe Cargo Assignment ===");
-
         GoodsBogie g1 = new GoodsBogie("Cylindrical", "");
         GoodsBogie g2 = new GoodsBogie("Rectangular", "");
 
@@ -278,66 +279,36 @@ public class Main {
         assignCargo(g2, "Petroleum");
         assignCargo(g2, "Coal");
 
-        System.out.println("Program continues after handling exceptions");
-
         // ===== UC16 =====
-        System.out.println("\n=== UC16: Bubble Sort Passenger Capacities ===");
-
-        System.out.println("Enter number of bogies:");
-        int size = sc.nextInt();
-
-        int[] capacities = new int[size];
-
-        System.out.println("Enter capacities:");
-        for (int i = 0; i < size; i++) {
-            capacities[i] = sc.nextInt();
-        }
-
-        bubbleSort(capacities);
-
-        System.out.println("Sorted Capacities:");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
-        System.out.println();
+        int[] arr = {72, 56, 24, 70, 60};
+        bubbleSort(arr);
 
         // ===== UC17 =====
-        System.out.println("\n=== UC17: Sort Bogie Names using Arrays.sort() ===");
-
-        System.out.println("Enter number of bogie names:");
-        int m = sc.nextInt();
-        sc.nextLine();
-
-        String[] names = new String[m];
-
-        System.out.println("Enter bogie names:");
-        for (int i = 0; i < m; i++) {
-            names[i] = sc.nextLine();
-        }
-
+        String[] names = {"Sleeper", "AC Chair", "First Class"};
         Arrays.sort(names);
 
-        System.out.println("Sorted Bogie Names:");
-        System.out.println(Arrays.toString(names));
-
         // ===== UC18 =====
-        System.out.println("\n=== UC18: Linear Search for Bogie ID ===");
+        String[] ids = {"BG101","BG205","BG309","BG412","BG550"};
+        System.out.println("\nLinear Search: " + linearSearch(ids, "BG309"));
+
+        // ===== UC19 =====
+        System.out.println("\n=== UC19: Binary Search ===");
 
         System.out.println("Enter number of bogie IDs:");
-        int k = sc.nextInt();
+        int size = sc.nextInt();
         sc.nextLine();
 
-        String[] ids = new String[k];
+        String[] searchArr = new String[size];
 
         System.out.println("Enter bogie IDs:");
-        for (int i = 0; i < k; i++) {
-            ids[i] = sc.nextLine();
+        for (int i = 0; i < size; i++) {
+            searchArr[i] = sc.nextLine();
         }
 
         System.out.println("Enter ID to search:");
         String key = sc.nextLine();
 
-        boolean found = linearSearch(ids, key);
+        boolean found = binarySearch(searchArr, key);
 
         if (found)
             System.out.println("Bogie ID FOUND");
