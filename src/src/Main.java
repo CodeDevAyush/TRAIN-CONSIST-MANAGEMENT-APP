@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.regex.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -29,8 +30,10 @@ public class Main {
 
         public String getType() { return type; }
         public String getCargo() { return cargo; }
+        public void setCargo(String cargo) { this.cargo = cargo; }
     }
 
+    // ===== UC14 Exception =====
     static class InvalidCapacityException extends Exception {
         public InvalidCapacityException(String msg) {
             super(msg);
@@ -52,7 +55,41 @@ public class Main {
         public int getCapacity() { return capacity; }
     }
 
+    // ===== UC15 Runtime Exception =====
+    static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
+            super(message);
+        }
+    }
+
+    // ===== UC15 Method =====
+    public static void assignCargo(GoodsBogie bogie, String cargo) {
+        try {
+            System.out.println("\nAssigning " + cargo + " to " + bogie.getType() + " bogie");
+
+            if (bogie.getType().equalsIgnoreCase("Rectangular") &&
+                    cargo.equalsIgnoreCase("Petroleum")) {
+
+                throw new CargoSafetyException(
+                        "Unsafe Assignment: Petroleum cannot be loaded in Rectangular bogie"
+                );
+            }
+
+            // Safe assignment
+            bogie.setCargo(cargo);
+            System.out.println("Cargo assigned successfully");
+
+        } catch (CargoSafetyException e) {
+            System.out.println("ERROR: " + e.getMessage());
+
+        } finally {
+            System.out.println("Assignment process completed (logged)");
+        }
+    }
+
     public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
 
         // ===== UC1 =====
         System.out.println("=== Train Consist Management App ===");
@@ -60,23 +97,27 @@ public class Main {
         System.out.println("Initial bogie count: " + trainConsist.size());
 
         // ===== UC2 =====
-        List<String> passengerBogies = new ArrayList<>();
-        passengerBogies.add("Sleeper");
-        passengerBogies.add("AC Chair");
-        passengerBogies.add("First Class");
-        passengerBogies.remove("AC Chair");
+        System.out.println("\nEnter number of passenger bogies:");
+        int n = sc.nextInt();
+        sc.nextLine();
 
-        if (passengerBogies.contains("Sleeper")) {
-            System.out.println("Sleeper exists");
+        List<String> passengerBogies = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            passengerBogies.add(sc.nextLine());
         }
-        System.out.println(passengerBogies);
+
+        System.out.println("Enter bogie to remove:");
+        String remove = sc.nextLine();
+        passengerBogies.remove(remove);
+
+        System.out.println("Final List: " + passengerBogies);
 
         // ===== UC3 =====
         Set<String> bogieIds = new HashSet<>();
         bogieIds.add("BG101");
         bogieIds.add("BG102");
         bogieIds.add("BG101");
-        System.out.println(bogieIds);
+        System.out.println("Unique IDs: " + bogieIds);
 
         // ===== UC4 =====
         LinkedList<String> consist = new LinkedList<>();
@@ -88,7 +129,7 @@ public class Main {
         consist.add(2, "Pantry");
         consist.removeFirst();
         consist.removeLast();
-        System.out.println(consist);
+        System.out.println("Updated Consist: " + consist);
 
         // ===== UC5 =====
         LinkedHashSet<String> formation = new LinkedHashSet<>();
@@ -96,7 +137,8 @@ public class Main {
         formation.add("Sleeper");
         formation.add("Cargo");
         formation.add("Sleeper");
-        System.out.println(formation);
+
+        System.out.println("Formation: " + formation);
 
         // ===== UC6 =====
         HashMap<String, Integer> capacityMap = new HashMap<>();
@@ -104,9 +146,7 @@ public class Main {
         capacityMap.put("AC Chair", 60);
         capacityMap.put("First Class", 24);
 
-        for (Map.Entry<String, Integer> e : capacityMap.entrySet()) {
-            System.out.println(e.getKey() + " -> " + e.getValue());
-        }
+        capacityMap.forEach((k, v) -> System.out.println(k + " -> " + v));
 
         // ===== UC7 =====
         List<Bogie> bogies = new ArrayList<>();
@@ -116,27 +156,22 @@ public class Main {
 
         bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
 
-        for (Bogie b : bogies) {
-            System.out.println(b.getName() + " -> " + b.getCapacity());
-        }
+        System.out.println("Sorted Bogies:");
+        bogies.forEach(b -> System.out.println(b.getName() + " -> " + b.getCapacity()));
 
         // ===== UC8 =====
-        List<Map.Entry<String, Integer>> filtered =
-                capacityMap.entrySet()
-                        .stream()
-                        .filter(e -> e.getValue() > 60)
-                        .toList();
-
-        for (Map.Entry<String, Integer> e : filtered) {
-            System.out.println(e.getKey());
-        }
+        System.out.println("Filtered (>60 capacity):");
+        capacityMap.entrySet()
+                .stream()
+                .filter(e -> e.getValue() > 60)
+                .forEach(e -> System.out.println(e.getKey()));
 
         // ===== UC9 =====
         Map<String, List<Bogie>> grouped =
                 bogies.stream()
                         .collect(Collectors.groupingBy(b -> "Passenger"));
 
-        System.out.println(grouped);
+        System.out.println("Grouped: " + grouped);
 
         // ===== UC10 =====
         int totalSeats = bogies.stream()
@@ -146,8 +181,11 @@ public class Main {
         System.out.println("Total Seats: " + totalSeats);
 
         // ===== UC11 =====
-        String trainId = "TRN-1234";
-        String cargoCode = "PET-AB";
+        System.out.println("\nEnter Train ID:");
+        String trainId = sc.next();
+
+        System.out.println("Enter Cargo Code:");
+        String cargoCode = sc.next();
 
         Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
         Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
@@ -189,12 +227,31 @@ public class Main {
 
         // ===== UC14 =====
         try {
-            PassengerBogie pb1 = new PassengerBogie("Sleeper", 72);
-            System.out.println(pb1.getType());
+            System.out.println("\nEnter Passenger Bogie Type:");
+            String type = sc.next();
 
-            PassengerBogie pb2 = new PassengerBogie("AC", -10);
+            System.out.println("Enter Capacity:");
+            int cap = sc.nextInt();
+
+            PassengerBogie pb = new PassengerBogie(type, cap);
+            System.out.println("Created: " + pb.getType() + " with capacity " + pb.getCapacity());
+
         } catch (InvalidCapacityException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
+
+        // ===== UC15 =====
+        System.out.println("\n=== UC15: Safe Cargo Assignment ===");
+
+        GoodsBogie g1 = new GoodsBogie("Cylindrical", "");
+        GoodsBogie g2 = new GoodsBogie("Rectangular", "");
+
+        assignCargo(g1, "Petroleum");   // safe
+        assignCargo(g2, "Petroleum");   // unsafe
+        assignCargo(g2, "Coal");        // safe again
+
+        System.out.println("Program continues after handling exceptions");
+
+        sc.close();
     }
 }
