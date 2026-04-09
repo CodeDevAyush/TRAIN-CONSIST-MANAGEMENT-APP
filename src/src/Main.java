@@ -75,7 +75,6 @@ public class Main {
                 );
             }
 
-            // Safe assignment
             bogie.setCargo(cargo);
             System.out.println("Cargo assigned successfully");
 
@@ -84,6 +83,26 @@ public class Main {
 
         } finally {
             System.out.println("Assignment process completed (logged)");
+        }
+    }
+
+    // ===== UC16 Bubble Sort =====
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false;
+
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            if (!swapped) break;
         }
     }
 
@@ -137,7 +156,6 @@ public class Main {
         formation.add("Sleeper");
         formation.add("Cargo");
         formation.add("Sleeper");
-
         System.out.println("Formation: " + formation);
 
         // ===== UC6 =====
@@ -251,6 +269,28 @@ public class Main {
         assignCargo(g2, "Coal");        // safe again
 
         System.out.println("Program continues after handling exceptions");
+
+        // ===== UC16 =====
+        System.out.println("\n=== UC16: Bubble Sort Passenger Capacities ===");
+
+        System.out.println("Enter number of bogies:");
+        int size = sc.nextInt();
+
+        int[] capacities = new int[size];
+
+        System.out.println("Enter capacities:");
+        for (int i = 0; i < size; i++) {
+            capacities[i] = sc.nextInt();
+        }
+
+        bubbleSort(capacities);
+
+        System.out.println("Sorted Capacities:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
+
+        System.out.println();
 
         sc.close();
     }
