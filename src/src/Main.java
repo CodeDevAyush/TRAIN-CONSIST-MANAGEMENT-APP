@@ -264,9 +264,9 @@ public class Main {
         GoodsBogie g1 = new GoodsBogie("Cylindrical", "");
         GoodsBogie g2 = new GoodsBogie("Rectangular", "");
 
-        assignCargo(g1, "Petroleum");   // safe
-        assignCargo(g2, "Petroleum");   // unsafe
-        assignCargo(g2, "Coal");        // safe again
+        assignCargo(g1, "Petroleum");
+        assignCargo(g2, "Petroleum");
+        assignCargo(g2, "Coal");
 
         System.out.println("Program continues after handling exceptions");
 
@@ -289,8 +289,26 @@ public class Main {
         for (int c : capacities) {
             System.out.print(c + " ");
         }
-
         System.out.println();
+
+        // ===== UC17 =====
+        System.out.println("\n=== UC17: Sort Bogie Names using Arrays.sort() ===");
+
+        System.out.println("Enter number of bogie names:");
+        int m = sc.nextInt();
+        sc.nextLine();
+
+        String[] names = new String[m];
+
+        System.out.println("Enter bogie names:");
+        for (int i = 0; i < m; i++) {
+            names[i] = sc.nextLine();
+        }
+
+        Arrays.sort(names);
+
+        System.out.println("Sorted Bogie Names:");
+        System.out.println(Arrays.toString(names));
 
         sc.close();
     }
